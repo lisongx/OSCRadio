@@ -3,12 +3,14 @@ OSCRadio {
 	classvar <messageName;
 	classvar <chatDefName;
 	classvar <chatSynthName;
+	classvar <chatOSCPath;
 
 	var <>server, <>logPath, <>localServer;
 
 	*initClass {
-		 	chatDefName = "speakandspell";
-			chatSynthName = "hub_pong";
+			chatOSCPath = \chat;
+		 	chatDefName = \speakandspell;
+			chatSynthName = \hub_pong;
 			messageName = [
 				"/quit", "/notify", "/status", "/cmd", "/dumpOSC", "/sync", "/clearSched",
 				"/error",
@@ -177,7 +179,7 @@ OSCRadio {
 				if (yourName.value!="", {
 					"sending message...".postln;
 					sendingMessage = yourName.value ++ ": " ++ message.value;
-					server.sendMsg("/chat", sendingMessage);
+					server.sendMsg(chatOSCPath, sendingMessage);
 					displayingMessage = display.string ++ "\n" ++ sendingMessage;
 					if (displayingMessage.findAll("\n").size>23, {
 						displayingMessage=displayingMessage.copyRange(
@@ -217,7 +219,7 @@ OSCRadio {
 					//	receivedMessage.size.postln;
 				}.defer;
 			},
-			"/chat"//,
+			chatOSCPath//,
 			// "oschub.asia"
 		);
 		//	Document.closeAll(false);
