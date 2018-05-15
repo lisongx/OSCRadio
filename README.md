@@ -30,12 +30,12 @@ First you can send you your synthdef to the hub:
 
 ```
 SynthDef(\sine, {|freq=400, amp=0.2, pan=0, dur=10|
-	var env, envgen;
-	var sig = SinOsc.ar(freq, mul:amp);
-	env = Env.sine(dur:1);
-	envgen = EnvGen.kr(env, doneAction: Done.freeSelf, timeScale: dur);
+  var env, envgen;
+  var sig = SinOsc.ar(freq, mul:amp);
+  env = Env.sine(dur:1);
+  envgen = EnvGen.kr(env, doneAction: Done.freeSelf, timeScale: dur);
   sig = Pan2.ar(sig, pan);
-	Out.ar(0, sig*envgen);
+  Out.ar(0, sig*envgen);
 }).doSend(~oschub);
 
 ```
