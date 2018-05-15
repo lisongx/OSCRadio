@@ -40,7 +40,7 @@ SynthDef(\sine, {|freq=400, amp=0.2, pan=0, dur=10|
 
 ```
 
-Then you just send message to the hub server, and everyone inside the hub will get your sound (including yourself!)
+Then you just send message to the hub server as you would to local server, and everyone inside the hub will get your sound (including yourself! the hub will also forward the message to you eventually).
 
 ```
 ~oschub.sendMsg('/s_new', \sine, 2000, 0, 1, \freq, 60.midicps);
