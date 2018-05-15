@@ -1,0 +1,11 @@
+(
+	\name: 			"OSCRadio",
+	\path: 			"OSCRadio",
+	\summary:		"client for accessing OSCHub",
+	\isCompatible:	{ Main.versionAtMost(3, 3).not },
+	\author: 		"Li Song, Tadashi Usami",
+	\organisation:	"OSCHub",
+	\helpdoc:		"help",
+	\since: 		"2018",
+	\version:		0.1
+)
