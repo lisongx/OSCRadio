@@ -81,6 +81,7 @@ OSCRadio {
 		^pathName.standardizePath;
 	}
 
+	// TODO: considering split the big init into small method
 	init {
 		var window, turnOn, display, yourName, nameText, message, sendButton;
 		var logFile, keepAlive, defKey;
