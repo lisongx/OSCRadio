@@ -24,7 +24,7 @@ OSCRadio.start(~oschub)
 
 Then you should see a chat window, after click the top botton you should be able to send message with other performers.
 
-## Make sound
+## Make sound (together)
 
 First you can send you your synthdef to the hub:
 
