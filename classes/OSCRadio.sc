@@ -24,14 +24,30 @@ OSCRadio {
 		// "/tr"
 	];
 
-	var <>server;
+	var <>server, <>logPath;
 
 	// server can be
 	// Server.new(\OSCHub, NetAddr.new("oschub.asia", 57120));
 	*start { |server, logPath|
+		hub = ^super.new;
+		hub.server = server;
+		hub.logPath = logPath
+		// return the hub instance
+		hub;
+	}
+
+	logFilePath {
+		pathName = if(this.logPath.isNil, {
+			PathName.new(thisProcess.nowExecutingPath).pathOnly++"sessionlog";
+		}, {
+			logPath;
+		});
+		pathName.standardizePath;
+	}
+
+	init {
 		var window, turnOn, display, yourName, nameText, message, sendButton;
-		var pathName, logFile, keepAlive, defKey;
-		this.server = server;
+		var logFile, keepAlive, defKey, hub;
 
 		// all the osc command name SC can use
 		defKey = Array.new;
@@ -54,13 +70,7 @@ OSCRadio {
 			);
 		});
 
-		pathName = if(logPath.isNil, {
-			PathName.new(thisProcess.nowExecutingPath).pathOnly++"sessionlog";
-		}, {
-			logPath;
-		});
-
-		logFile = File(pathName.standardizePath, "a");
+		logFile = File(this.logFilePath.value(), "a");
 		window = Window.new("o s c   r a d i o", Rect(50, 20, 500, 550));
 		window.view.decorator = FlowLayout(window.view.bounds);
 		window.view.decorator.gap = 2@2;
@@ -186,13 +196,12 @@ OSCRadio {
 				OSCdef(defKey[i]).free;
 			});
 			OSCdef(this.chatDefName).free;
-			thisProcess.recompile; // somehow, File error occurs without this
+			// somehow, File error occurs without this
+			thisProcess.recompile;
 			Server.killAll;
 			thisProcess.shutdown;
 			0.exit;
 		});
-
 	}
-
 
 }
