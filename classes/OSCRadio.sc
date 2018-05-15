@@ -51,30 +51,6 @@ OSCRadio {
 		^hub;
 	}
 
-	messageName {
-		var msgs = [
-			"/quit", "/notify", "/status", "/cmd", "/dumpOSC", "/sync", "/clearSched",
-			"/error",
-			"/d_recv", "/d_load", "/d_loadDir", "/d_free",
-			"/n_free", "/n_run", "/n_set", "/n_setn", "/n_fill", "/n_map", "/n_mapn",
-			"/n_mapa", "/n_mapan", "/n_before", "/n_after", "/n_query", "/n_trace",
-			"/n_order",
-			"/s_new", "/s_get", "/s_getn", "/s_noid",
-			"/g_new", "/p_new", "/g_head", "/g_tail", "/g_freeAll", "/g_deepFree",
-			"/g_dumpTree", "/g_queryTree",
-			"/u_cmd",
-			"/b_alloc", "/b_allocRead", "/b_allocReadChannel", "/b_read",
-			"/b_readChannel", "/b_write", "/b_free", "/b_zero", "/b_set", "/b_setn",
-			"/b_fill", "/b_gen", "/b_close", "/b_query", "/b_get", "/b_getn",
-			"/c_set", "/c_setn", "/c_fill", "/c_get", "/c_getn",
-			"/nrt_end"
-			// "/done, "/fail", "/late",
-			// "/n_go", "/n_end", "/n_off", "/n_on", "/n_move", "/n_info",
-			// "/tr"
-		];
-		^msgs;
-	}
-
 	logFilePath {
 		var pathName;
 
