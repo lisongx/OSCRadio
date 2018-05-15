@@ -38,7 +38,12 @@ OSCRadio {
 		var hub;
 
 		hub = super.new;
-		hub.server = server;
+		hub.server = if(server.isNil, {
+			// default server
+			Server.new(\OSCHub, NetAddr.new("oschub.asia", 57120));
+		}, {
+			server;
+		});
 		hub.logPath = logPath;
 		hub.localServer = Server.local;
 		hub.init.value();
