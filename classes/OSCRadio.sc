@@ -1,60 +1,94 @@
 OSCRadio {
 
-	classvar <chatDefName = \speakandspell;
-	classvar <chatSynthName = \pong;
+	classvar <messageName;
+	classvar <chatDefName;
+	classvar <chatSynthName;
 
-	classvar <messageName = [
-		"/quit", "/notify", "/status", "/cmd", "/dumpOSC", "/sync", "/clearSched",
-		"/error",
-		"/d_recv", "/d_load", "/d_loadDir", "/d_free",
-		"/n_free", "/n_run", "/n_set", "/n_setn", "/n_fill", "/n_map", "/n_mapn",
-		"/n_mapa", "/n_mapan", "/n_before", "/n_after", "/n_query", "/n_trace",
-		"/n_order",
-		"/s_new", "/s_get", "/s_getn", "/s_noid",
-		"/g_new", "/p_new", "/g_head", "/g_tail", "/g_freeAll", "/g_deepFree",
-		"/g_dumpTree", "/g_queryTree",
-		"/u_cmd",
-		"/b_alloc", "/b_allocRead", "/b_allocReadChannel", "/b_read",
-		"/b_readChannel", "/b_write", "/b_free", "/b_zero", "/b_set", "/b_setn",
-		"/b_fill", "/b_gen", "/b_close", "/b_query", "/b_get", "/b_getn",
-		"/c_set", "/c_setn", "/c_fill", "/c_get", "/c_getn",
-		"/nrt_end"
-		// "/done, "/fail", "/late",
-		// "/n_go", "/n_end", "/n_off", "/n_on", "/n_move", "/n_info",
-		// "/tr"
-	];
+	var <>server, <>logPath, <>localServer;
 
-	var <>server, <>logPath;
-
+	*initClass {
+		 	chatDefName = "speakandspell";
+			chatSynthName = "hub_pong";
+			messageName = [
+				"/quit", "/notify", "/status", "/cmd", "/dumpOSC", "/sync", "/clearSched",
+				"/error",
+				"/d_recv", "/d_load", "/d_loadDir", "/d_free",
+				"/n_free", "/n_run", "/n_set", "/n_setn", "/n_fill", "/n_map", "/n_mapn",
+				"/n_mapa", "/n_mapan", "/n_before", "/n_after", "/n_query", "/n_trace",
+				"/n_order",
+				"/s_new", "/s_get", "/s_getn", "/s_noid",
+				"/g_new", "/p_new", "/g_head", "/g_tail", "/g_freeAll", "/g_deepFree",
+				"/g_dumpTree", "/g_queryTree",
+				"/u_cmd",
+				"/b_alloc", "/b_allocRead", "/b_allocReadChannel", "/b_read",
+				"/b_readChannel", "/b_write", "/b_free", "/b_zero", "/b_set", "/b_setn",
+				"/b_fill", "/b_gen", "/b_close", "/b_query", "/b_get", "/b_getn",
+				"/c_set", "/c_setn", "/c_fill", "/c_get", "/c_getn",
+				"/nrt_end"
+				// "/done, "/fail", "/late",
+				// "/n_go", "/n_end", "/n_off", "/n_on", "/n_move", "/n_info",
+				// "/tr"
+			];
+	}
 	// server can be
 	// Server.new(\OSCHub, NetAddr.new("oschub.asia", 57120));
 	*start { |server, logPath|
-		hub = ^super.new;
+		var hub;
+
+		hub = super.new;
 		hub.server = server;
-		hub.logPath = logPath
+		hub.logPath = logPath;
+		hub.localServer = Server.local;
+		hub.init.value();
 		// return the hub instance
-		hub;
+		^hub;
+	}
+
+	messageName {
+		var msgs = [
+			"/quit", "/notify", "/status", "/cmd", "/dumpOSC", "/sync", "/clearSched",
+			"/error",
+			"/d_recv", "/d_load", "/d_loadDir", "/d_free",
+			"/n_free", "/n_run", "/n_set", "/n_setn", "/n_fill", "/n_map", "/n_mapn",
+			"/n_mapa", "/n_mapan", "/n_before", "/n_after", "/n_query", "/n_trace",
+			"/n_order",
+			"/s_new", "/s_get", "/s_getn", "/s_noid",
+			"/g_new", "/p_new", "/g_head", "/g_tail", "/g_freeAll", "/g_deepFree",
+			"/g_dumpTree", "/g_queryTree",
+			"/u_cmd",
+			"/b_alloc", "/b_allocRead", "/b_allocReadChannel", "/b_read",
+			"/b_readChannel", "/b_write", "/b_free", "/b_zero", "/b_set", "/b_setn",
+			"/b_fill", "/b_gen", "/b_close", "/b_query", "/b_get", "/b_getn",
+			"/c_set", "/c_setn", "/c_fill", "/c_get", "/c_getn",
+			"/nrt_end"
+			// "/done, "/fail", "/late",
+			// "/n_go", "/n_end", "/n_off", "/n_on", "/n_move", "/n_info",
+			// "/tr"
+		];
+		^msgs;
 	}
 
 	logFilePath {
-		pathName = if(this.logPath.isNil, {
-			PathName.new(thisProcess.nowExecutingPath).pathOnly++"sessionlog";
+		var pathName;
+
+		pathName = if(logPath.isNil, {
+			"~/.oscradio_session_log";
 		}, {
 			logPath;
 		});
-		pathName.standardizePath;
+		^pathName.standardizePath;
 	}
 
 	init {
 		var window, turnOn, display, yourName, nameText, message, sendButton;
-		var logFile, keepAlive, defKey, hub;
+		var logFile, keepAlive, defKey;
 
 		// all the osc command name SC can use
 		defKey = Array.new;
 
-		for (0, this.messageName.size-1, {|i|
+		for (0, messageName.size-1, {|i|
 			var name;
-			name = this.messageName[i].copyRange(1, messageName[i].size-1);
+			name = messageName[i].copyRange(1, messageName[i].size-1);
 			defKey = defKey.add(name.asSymbol);
 		});
 
@@ -64,7 +98,7 @@ OSCRadio {
 				defKey[i],
 				{|msg, time, addr, recvPort|
 					msg.postln;
-					s.listSendMsg(msg);
+					localServer.listSendMsg(msg);
 				},
 				messageName[i]
 			);
@@ -83,8 +117,8 @@ OSCRadio {
 
 		turnOn.action = {arg butt;
 			if (butt.value==1, {
-				s.waitForBoot({
-					SynthDef.new(this.chatSynthName, {|freq|
+				localServer.waitForBoot({
+					SynthDef.new(chatSynthName, {|freq|
 						Out.ar(
 							0,
 							EnvGen.kr(Env.perc, doneAction: 2)
@@ -99,7 +133,7 @@ OSCRadio {
 				turnOn.stringColor = Color.yellow;
 				window.refresh;
 				{
-					if (Server.local.serverRunning.not, {
+					if (localServer.serverRunning.not, {
 						turnOn.string = "          Having some problem. Sorry for the inconvenience.";
 						turnOn.stringColor = Color.red;
 						}, {
@@ -151,7 +185,7 @@ OSCRadio {
 							displayingMessage.size-1
 						);
 					});
-					server.sendMsg("/s_new", this.chatSynthName, 1001, 0, 1, \freq, 440);
+					server.sendMsg("/s_new", chatSynthName, 1001, 0, 1, \freq, 440);
 					//display.valueAction_(displayingMessage);
 					if (nameText.value!="", {nameText.string = "";});
 					}, {
@@ -166,7 +200,7 @@ OSCRadio {
 		};
 
 		OSCdef.newMatching(
-			this.chatDefName,
+			chatDefName,
 			{|msg, time, addr, recvPort|
 				var receivedMessage;
 				"received!".postln;
@@ -195,7 +229,7 @@ OSCRadio {
 			for (0, defKey.size-1, {|i|
 				OSCdef(defKey[i]).free;
 			});
-			OSCdef(this.chatDefName).free;
+			OSCdef(chatDefName).free;
 			// somehow, File error occurs without this
 			thisProcess.recompile;
 			Server.killAll;
