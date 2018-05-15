@@ -1,5 +1,10 @@
 + SynthDef {
 
+	// there is a hard limit on the synthdef size when send to server
+	// in order to make it work we override this method in synthDef
+	// see source at
+	// https://github.com/supercollider/supercollider/commit/8af781a333b8101c580266c4f422f1a4a8ba3a2d
+
 	doSend { |server, completionMsg|
 		var bytes = this.asBytes;
 		if (bytes.size < (65535 div: 4)) {
