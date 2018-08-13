@@ -12,8 +12,8 @@ OSCRadio {
 		 	chatDefName = \speakandspell;
 			chatSynthName = \hub_pong;
 			messageName = [
-				"/quit", "/notify", "/status", "/cmd", "/dumpOSC", "/sync", "/clearSched",
-				"/error",
+				"/quit", "/notify", "/status", "/cmd", "/dumpOSC", "/sync", "/synced",
+				"/error", "/clearSched",
 				"/d_recv", "/d_load", "/d_loadDir", "/d_free",
 				"/n_free", "/n_run", "/n_set", "/n_setn", "/n_fill", "/n_map", "/n_mapn",
 				"/n_mapa", "/n_mapan", "/n_before", "/n_after", "/n_query", "/n_trace",
