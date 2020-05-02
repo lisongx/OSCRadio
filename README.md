@@ -8,7 +8,7 @@ SuperCollider Quark to connecting the [OSCHUB](http://oschub.asia/).
 Inside your SuperCollider editor, with iterpreter booted, run this line to install the quark:
 
 ```
-Quarks.install("https://github.com/seansay/OSCRadio.git")
+Quarks.install("https://github.com/lisongx/OSCRadio.git")
 ```
 
 ## Connect the OSCHub
